@@ -40,3 +40,11 @@ http:
         traefik-plugin-disable-graphql-introspection:
           GraphQLPath: /graphql
 ```
+
+### Testing
+
+You can run tests by running following command:
+
+```
+docker compose build && docker compose run plugin make test
+```
