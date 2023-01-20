@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -33,6 +34,20 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}, nil
 }
 
+func checkIfRequestIsIntrospection(body string) bool {
+	if strings.Contains(body, "__schema") {
+		return true
+	}
+
+	match, _ := regexp.MatchString("__type[^name]", body)
+
+	if match {
+		return true
+	}
+
+	return false
+}
+
 func (d *DisableGraphQLIntrospection) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -48,7 +63,7 @@ func (d *DisableGraphQLIntrospection) ServeHTTP(rw http.ResponseWriter, r *http.
 		return
 	}
 	if r.Method == "POST" && r.URL.Path == d.graphQLPath {
-		if strings.Contains(string(body), "__schema") || strings.Contains(string(body), "__type") {
+		if checkIfRequestIsIntrospection(string(body)) {
 			rw.Header().Set("Content-Type", "application/json")
 			rw.Write([]byte(`{
 				"errors": [

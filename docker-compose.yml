@@ -1,0 +1,11 @@
+version: '3.8'
+
+name: traefik-plugin-disable-graphql-introspection
+
+services:
+  plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/go/src/traefik-plugin-disable-graphql-introspection
