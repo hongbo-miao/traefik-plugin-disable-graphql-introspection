@@ -13,7 +13,7 @@ pilot:
 experimental:
   plugins:
     traefik-plugin-disable-graphql-introspection:
-      modulename: github.com/Hongbo-Miao/traefik-plugin-disable-graphql-introspection
+      modulename: github.com/hongbo-miao/traefik-plugin-disable-graphql-introspection
       version: v0.1.0
 ```
 
